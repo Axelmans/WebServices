@@ -1,0 +1,17 @@
+.movie-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 5.5rem;
+}
+
+.movie-list::-webkit-scrollbar {
+    height: 10px;
+}
+
+h1 {
+    padding-top: 1rem;
+    text-align: center;
+}

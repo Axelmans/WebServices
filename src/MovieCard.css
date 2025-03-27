@@ -1,0 +1,52 @@
+.movie-card {
+    width: 504px;
+    min-width: 504px;
+    height: 754px;
+    min-height: 754px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+}
+
+.movie-card img {
+    width: 500px;
+    height: 750px;
+    object-fit: cover;
+}
+
+.modal-adult-span {
+    background-color: red;
+    color: white;
+    padding: 4px 8px;
+    margin-left: 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
+
+.modal-body {
+    display: flex;
+    align-items: center;
+}
+
+.modal-body img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.img-div {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.information-div {
+    flex: 2;
+}
+
+.rating-div {
+    margin-top: 10px;
+}
+
+.rating-span {
+    font-weight: bold;
+}
