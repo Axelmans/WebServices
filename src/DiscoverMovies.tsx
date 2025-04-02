@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+
 import MovieList, {Movie} from "./MovieList"
-import LoginBorder from "./LoginBorder";
 
 import "./DiscoverMovies.css"
 
@@ -22,8 +22,7 @@ function DiscoverMovies() {
     // Use the MovieList component to display the movies
     return(
         <div>
-            <LoginBorder/>
-            <h1> Discover the latest popular movies! </h1>
+            <h1> Discover the latest popular movies!</h1>
             <MovieList movies={movies}/>
         </div>
     )

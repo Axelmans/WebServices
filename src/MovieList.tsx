@@ -77,7 +77,7 @@ const MovieList: FC<Movies> =  ({ movies }) => {
                 );
                 setMoviesWithRuntime(updatedMovies);
             } catch (error) {
-                console.error("Failed to fetch runtimes", error);
+                console.error("Failed to fetch runtimes: ", error);
             }
         };
         fetchMovieRuntimes().then();
@@ -91,7 +91,7 @@ const MovieList: FC<Movies> =  ({ movies }) => {
                     title={movie.title}
                     description={movie.overview}
                     image={image_base_url + movie.poster_path}
-                    isAdult={movie.adult}
+                    adult={movie.adult}
                     genres={getGenresByIds(movie.genre_ids)}
                     rating={movie.vote_average}
                     runtime={movie.runtime}

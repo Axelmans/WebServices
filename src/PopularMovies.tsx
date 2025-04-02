@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import MovieList, {Movie} from "./MovieList"
-import LoginBorder from "./LoginBorder";
 
 import "./PopularMovies.css"
 
@@ -40,7 +39,6 @@ function PopularMovies() {
     // Use the MovieList component to display the movies
     return(
         <div>
-          <LoginBorder/>
           <h1> Discover the latest popular movies! </h1>
           <div className="buttons">
             <button onClick={handleMinus} className="button-1" disabled={n === 1}>-</button>

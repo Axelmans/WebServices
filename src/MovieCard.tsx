@@ -1,54 +1,101 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Button, Card, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./MovieCard.css"
+import {useSession} from "./SessionContext";
 
-// This is the main information of interest of a movie
+// This is the main information of interest from a movie
 interface MovieCardProps {
   id: number;
   title: string;
   description: string;
   image: string;
-  isAdult: boolean;
+  adult: boolean;
   genres: string[];
   rating: number;
   runtime: number;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, isAdult, genres, rating, runtime }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, adult, genres, rating, runtime }) => {
+
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
+
+  // Depending on the rating score, the rating will be shown on screen in a different colour
   const getRatingColor = (rating: number) => {
     if (rating >= 6.5) return 'green';
+    // orange is more visible than yellow
     if (rating >= 5) return 'orange';
+    // return red in all other cases
     return 'red';
   };
+
+  // Runtime is given as a number (= amount of minutes)
+  // This formats it in hours and minutes
   const formatRuntime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
+    // For movies less than an hour long
+    if(hours === 0){
+      return `${mins}m`;
+    }
     return `${hours}h ${mins}m`;
   };
+
+  /* Navigations to other pages:
+      1. Movies with same genres of a given movie
+      2. Movies with a similar runtime of a given movie
+     Added to this component to prevent having to reuse them on each actual page! */
   const navigate = useNavigate();
   const handleNavigateToGenres = (movie_id: number) => {
+    handleCloseModal();
     navigate(`/movies/same_genres?movie_id=${movie_id}`);
   };
   const handleNavigateToRunTime = (movie_id: number) => {
+    handleCloseModal();
     navigate(`/movies/similar_run_time?movie_id=${movie_id}`);
   }
+
+  const loggedIn = useSession().loggedIn;
+  const sessionID = useSession().sessionID;
+  const favourites = useSession().favourites;
+  const update = useSession().update;
+  const handleSetFavourite = async (movie_id: number) => {
+    try{
+      await fetch(`http://localhost:5000/movies/favourite?movie_id=${movie_id}&session_id=${sessionID}`, {method: 'POST'});
+      update({favourites: [...favourites, id]});
+    }
+    catch(error){
+      console.log("Failed to favourite movie: ", error);
+    }
+  }
+  const handleRemoveFavourite = async (movie_id: number) => {
+    try {
+      await fetch(`http://localhost:5000/movies/unfavourite?movie_id=${movie_id}&session_id=${sessionID}`, {
+        method: 'POST'
+      });
+      update({favourites: favourites.filter(id => id !== movie_id)});
+    } catch (error) {
+      console.error("Failed to unfavourite movie:", error);
+    }
+  }
+
   return (
     <>
+        {/* The cards are shown initially, they only contain the movie poster */}
         <Card className="movie-card" onClick={handleShowModal}>
           <Card.Img variant="top" src={image}/>
         </Card>
-        {/* The modal opens when clicking on the card, it shows additional information */}
+        {/* The modal opens when clicking on the card, it shows additional information of the movie */}
         <Modal show={showModal} onHide={handleCloseModal} centered>
             <Modal.Header closeButton>
               <Modal.Title>
                 {title}
-                {isAdult && (
+                {/* TODO: test if this works (keep an eye out for 18+ movies?) */}
+                {adult && (
                   <span className="modal-adult-span">
                     18+
                   </span>
@@ -82,10 +129,18 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, is
                 </div>
               </div>
             </Modal.Body>
+            {/* The buttons are important for much of the required functionality */}
             <Modal.Footer>
-              <Button variant="primary" disabled>
-                Favourite
-              </Button>
+              {/*  */}
+              {favourites.includes(id) ? (
+                <Button variant="danger" onClick={() => handleRemoveFavourite(id)} disabled={!loggedIn || sessionID === null}>
+                  Unfavourite
+                </Button>
+              ) : (
+                <Button variant="primary" onClick={() => handleSetFavourite(id)} disabled={!loggedIn || sessionID === null}>
+                  Favourite
+                </Button>
+              )}
               <Button variant="primary" onClick={() => handleNavigateToGenres(id)}>
                 Movies with Same Genres
               </Button>

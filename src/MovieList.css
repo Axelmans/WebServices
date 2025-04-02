@@ -4,7 +4,8 @@
     gap: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-bottom: 5.5rem;
+    /* This puts the horizontal scrollbar at the very bottom, page cannot be scrolled vertically */
+    padding-bottom: 3.9rem;
 }
 
 .movie-list::-webkit-scrollbar {
