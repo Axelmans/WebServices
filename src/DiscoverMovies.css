@@ -1,0 +1,10 @@
+.main-div {
+    background-image: url("../public/Seats.png");
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+}

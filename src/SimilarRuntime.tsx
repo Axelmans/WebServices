@@ -52,8 +52,8 @@ function SimilarRuntime () {
         fetchMovies().then();
     }, [refID]);
     return(
-        <div>
-            <h1> Movies with similar runtime as {movieName} </h1>
+        <div className="main-div">
+            <h1> Movies with a similar runtime as "{movieName}" </h1>
             <MovieList movies={movies}/>
         </div>
     );

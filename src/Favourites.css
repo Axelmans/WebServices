@@ -7,10 +7,35 @@
 }
 
 .discover-button {
-  background-color: #3498db;
-  color: white;
+  background-color: white;
+  color: black;
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.barplot-button {
+  background-color: white;
+  color: black;
+  position: absolute;
+  right: 1rem;
+  border: none;
+}
+
+.barplot-button:disabled,
+.barplot-button:hover,
+.barplot-button:focus,
+.barplot-button:active {
+  background-color: white;
+  color: black;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.main-div {
+    background-image: url("../public/Seats.png");
+    display: flex;
+    flex-direction: column;
 }

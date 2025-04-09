@@ -9,6 +9,9 @@
 }
 
 .movie-list::-webkit-scrollbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     height: 10px;
 }
 

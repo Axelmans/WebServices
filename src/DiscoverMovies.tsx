@@ -21,7 +21,7 @@ function DiscoverMovies() {
     }, []);
     // Use the MovieList component to display the movies
     return(
-        <div>
+        <div className="main-div">
             <h1> Discover the latest popular movies!</h1>
             <MovieList movies={movies}/>
         </div>

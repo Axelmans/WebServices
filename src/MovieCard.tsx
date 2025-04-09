@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -59,14 +59,16 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
     navigate(`/movies/similar_run_time?movie_id=${movie_id}`);
   }
 
-  const loggedIn = useSession().loggedIn;
-  const sessionID = useSession().sessionID;
-  const favourites = useSession().favourites;
-  const update = useSession().update;
+  const {
+    favourites,
+    setFavourites
+  } = useSession();
+
   const handleSetFavourite = async (movie_id: number) => {
     try{
-      await fetch(`http://localhost:5000/movies/favourite?movie_id=${movie_id}&session_id=${sessionID}`, {method: 'POST'});
-      update({favourites: [...favourites, id]});
+      await fetch(`http://localhost:5000/movies/favourite?movie_id=${movie_id}`, {method: 'POST'});
+      setFavourites([...favourites, id]);
+      handleCloseModal();
     }
     catch(error){
       console.log("Failed to favourite movie: ", error);
@@ -74,11 +76,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
   }
   const handleRemoveFavourite = async (movie_id: number) => {
     try {
-      await fetch(`http://localhost:5000/movies/unfavourite?movie_id=${movie_id}&session_id=${sessionID}`, {
+      await fetch(`http://localhost:5000/movies/unfavourite?movie_id=${movie_id}`, {
         method: 'POST'
       });
-      update({favourites: favourites.filter(id => id !== movie_id)});
-    } catch (error) {
+      setFavourites(favourites.filter(id => id !== movie_id));
+      handleCloseModal();
+    }
+    catch (error) {
       console.error("Failed to unfavourite movie:", error);
     }
   }
@@ -90,7 +94,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
           <Card.Img variant="top" src={image}/>
         </Card>
         {/* The modal opens when clicking on the card, it shows additional information of the movie */}
-        <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal show={showModal} onHide={handleCloseModal} centered dialogClassName="custom-modal">
             <Modal.Header closeButton>
               <Modal.Title>
                 {title}
@@ -104,7 +108,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
             </Modal.Header>
             <Modal.Body className="modal-body">
               <div className="img-div">
-                <img
+                <img className="rounded"
                   src={image}
                   alt={title}
                 />
@@ -133,11 +137,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
             <Modal.Footer>
               {/*  */}
               {favourites.includes(id) ? (
-                <Button variant="danger" onClick={() => handleRemoveFavourite(id)} disabled={!loggedIn || sessionID === null}>
+                <Button variant="primary" onClick={() => handleRemoveFavourite(id)}>
                   Unfavourite
                 </Button>
               ) : (
-                <Button variant="primary" onClick={() => handleSetFavourite(id)} disabled={!loggedIn || sessionID === null}>
+                <Button variant="primary" onClick={() => handleSetFavourite(id)}>
                   Favourite
                 </Button>
               )}

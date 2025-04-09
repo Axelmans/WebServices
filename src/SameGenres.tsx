@@ -52,8 +52,8 @@ function SameGenres () {
         fetchMovies().then();
     }, [refID]);
     return(
-        <div>
-            <h1> Movies with the same genres as {movieName} </h1>
+        <div className="main-div">
+            <h1> Movies with the same genres as "{movieName}" </h1>
             <MovieList movies={movies}/>
         </div>
     );
