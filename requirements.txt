@@ -1,0 +1,6 @@
+flasgger
+flask
+flask_cors
+Flask-RESTful
+httpx
+requests
