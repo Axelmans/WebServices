@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Base from "./Base";
 import DiscoverMovies from "./DiscoverMovies";
 import Favourites from "./Favourites";
-import PopularMovies from "./PopularMovies";
 import SameGenres from "./SameGenres"
 import SimilarRuntime from "./SimilarRuntime";
 import TopBorder from "./TopBorder";
@@ -31,9 +30,8 @@ function MainContent() {
                 {/* TODO: Create a component for the base route with buttons to various functionalities */}
                 <Route path="/" element={<Base/>}/>
                 <Route path="/movies" element={<DiscoverMovies/>}/>
-                <Route path="/movies/popular" element={<PopularMovies/>}/>
-                <Route path="/movies/same_genres" element={<SameGenres/>}/>
-                <Route path="/movies/similar_run_time" element={<SimilarRuntime/>}/>
+                <Route path="/movies/:movie_id/similar/genres" element={<SameGenres/>}/>
+                <Route path="/movies/:movie_id/similar/runtime" element={<SimilarRuntime/>}/>
                 <Route path="/movies/favourites" element={<Favourites/>}/>
             </Routes>
         </BrowserRouter>

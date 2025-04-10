@@ -17,12 +17,32 @@ function Favourites() {
                 const response = await fetch(`http://localhost:5000/movies/favourites`);
                 const data = await response.json();
                 setMovies(data);
-            } catch (error) {
+            }
+            catch (error) {
                 console.error("Failed to fetch movies:", error);
             }
         };
         fetchMovies().then();
     }, [favourites]);
+    // For some reason, this page also requires to fetch extra info manually
+    const[moviesExtraInfo, setMoviesExtraInfo] = useState<Movie[]>(movies);
+    useEffect(() => {
+        const fetchMovieDetails = async () => {
+            const requests = movies.map(async (movie) => {
+                const res = await fetch(`http://localhost:5000/movies/${movie.id}/`);
+                const data = await res.json();
+                return {
+                    ...movie,
+                    runtime: data.runtime,
+                    // Genres should store the names, not the id's
+                    genres: data.genres.map((g: { name: string }) => g.name),
+                };
+            });
+            const results = await Promise.all(requests);
+            setMoviesExtraInfo(results);
+        };
+        fetchMovieDetails().then();
+    }, [movies]);
     const navigate = useNavigate();
     const handleNavigateToDiscover = () => {
         navigate(`/movies`);
@@ -55,7 +75,7 @@ function Favourites() {
                             <button className="discover-button" onClick={handleNavigateToDiscover}> Discover </button>
                         </div>
                     ) : (
-                        <MovieList movies={movies}/>
+                        <MovieList movies={moviesExtraInfo}/>
                     )
                 }
             </div>

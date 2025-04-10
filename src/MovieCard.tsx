@@ -52,11 +52,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
   const navigate = useNavigate();
   const handleNavigateToGenres = (movie_id: number) => {
     handleCloseModal();
-    navigate(`/movies/same_genres?movie_id=${movie_id}`);
+    navigate(`/movies/${movie_id}/similar/genres`);
   };
   const handleNavigateToRunTime = (movie_id: number) => {
     handleCloseModal();
-    navigate(`/movies/similar_run_time?movie_id=${movie_id}`);
+    navigate(`/movies/${movie_id}/similar/runtime`);
   }
 
   const {
@@ -66,8 +66,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
 
   const handleSetFavourite = async (movie_id: number) => {
     try{
-      await fetch(`http://localhost:5000/movies/favourite?movie_id=${movie_id}`, {method: 'POST'});
+      await fetch(`http://localhost:5000/movies/${movie_id}/favourite`, {method: 'POST'});
       setFavourites([...favourites, id]);
+      localStorage.setItem('favourites', [...favourites, id].join(","));
       handleCloseModal();
     }
     catch(error){
@@ -76,10 +77,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
   }
   const handleRemoveFavourite = async (movie_id: number) => {
     try {
-      await fetch(`http://localhost:5000/movies/unfavourite?movie_id=${movie_id}`, {
+      await fetch(`http://localhost:5000/movies/${movie_id}/unfavourite`, {
         method: 'POST'
       });
       setFavourites(favourites.filter(id => id !== movie_id));
+      localStorage.setItem('favourites', favourites.filter(id => id !== movie_id).join(","));
       handleCloseModal();
     }
     catch (error) {
@@ -98,7 +100,6 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, title, description, image, ad
             <Modal.Header closeButton>
               <Modal.Title>
                 {title}
-                {/* TODO: test if this works (keep an eye out for 18+ movies?) */}
                 {adult && (
                   <span className="modal-adult-span">
                     18+

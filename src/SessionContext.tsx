@@ -20,7 +20,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [favourites, setFavourites] = useState<number[]>(() => {
     const stored = localStorage.getItem("favourites");
     try {
-      return stored ? JSON.parse(stored) : [];
+      return stored ? stored.split(",").map(Number) : [];
     }
     catch {
       return [];
